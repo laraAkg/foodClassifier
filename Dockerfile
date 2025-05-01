@@ -16,4 +16,4 @@ RUN ./mvnw -Dmaven.test.skip=true package
 
 # Docker Run Command
 EXPOSE 8080
-CMD ["java", "-jar", "target/footwear-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "target/food-0.0.1-SNAPSHOT.jar"]
