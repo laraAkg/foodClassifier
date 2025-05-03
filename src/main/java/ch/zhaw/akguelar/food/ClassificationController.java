@@ -14,19 +14,33 @@ import org.springframework.web.multipart.MultipartFile;
 
 import ch.zhaw.akguelar.food.dto.LabelInfo;
 
+/**
+ * REST-Controller für Bildklassifikation:
+ * - Healthcheck
+ * - Auflisten verfügbarer Modelle und Labels
+ * - Inferenz (Bild-Upload & Klassifikation)
+ */
 @RestController
 public class ClassificationController {
 
-    private final Inference inference = new Inference(); // oder @Autowired
+    private final Inference inference = new Inference();
 
-    /** 6. Verfügbare Klassen / Label-Metadaten **/
+    /**
+     * Gibt Metadaten zu allen Labels zurück (Name + Beschreibung).
+     *
+     * @return Liste von LabelInfo-DTOs
+     */
     @GetMapping("/labels")
     public List<LabelInfo> getLabels() {
         // Rückgabe z.B. aller Klassennamen + Beschreibung
         return inference.getLabelInfos();
     }
 
-    /** 1. Healthcheck / Status **/
+    /**
+     * Einfacher Healthcheck.
+     *
+     * @return Status, Version und Server-Zeitpunkt
+     */
     @GetMapping("/health")
     public Map<String, String> health() {
         return Map.of(
@@ -35,26 +49,37 @@ public class ClassificationController {
                 "timestamp", Instant.now().toString());
     }
 
-    /** 2. Modelle auflisten **/
+    /**
+     * Listet alle geladenen Modelle (Dateinamen ohne .params).
+     *
+     * @return Liste von Modellnamen
+     */
     @GetMapping("/models")
     public List<String> listModels() {
         // z.B. aus deinem Inference-Service: inference.availableModels()
         return inference.availableModels();
     }
 
+    /**
+     * Nimmt ein Bild entgegen, führt die Klassifikation durch
+     * und gibt eine sortierte Liste von Ergebnissen zurück.
+     *
+     * @param image MultipartFile mit dem Bild (JPG/PNG o.ä.)
+     * @return Liste von ClassificationResult, absteigend nach Wahrscheinlichkeit
+     */
     @PostMapping(path = "/analyze", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ClassificationResult> predict(@RequestParam("image") MultipartFile image) throws Exception {
 
-        // 🛡 Validierung
+        // Validierung
         if (image == null || image.isEmpty()) {
             throw new IllegalArgumentException("Kein Bild übermittelt.");
         }
 
-        // 🧾 Logging
+        // Logging
         System.out.println("[INFO] Bild empfangen: " + image.getOriginalFilename() +
                 " (" + image.getSize() + " Bytes)");
 
-        // 🧠 Inferenz und Aufbereitung als JSON-kompatible Liste
+        // Inferenz und Aufbereitung als JSON-kompatible Liste
         return inference.predict(image.getBytes())
                 .items().stream()
                 .map(item -> new ClassificationResult(item.getClassName(), item.getProbability()))

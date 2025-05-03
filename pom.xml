@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ch.zhaw.akguelar</groupId>
-	<artifactId>footwear</artifactId>
+	<artifactId>tinyfood</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>footwear</name>
-	<description>Demo project for Spring Boot</description>
+	<name>tinyfood</name>
+	<description>Food classifier project for Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>
