@@ -58,7 +58,7 @@ Projekt2MDM/
 
 1. Projekt klonen:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/laraAkg/foodClassifier.git
    cd Projekt2MDM/food
    ```
 
@@ -83,14 +83,10 @@ Projekt2MDM/
 | GET     | `/labels`    | Gibt alle verfügbaren Klassifikationslabels |
 | POST    | `/analyze`   | Klassifiziert hochgeladenes Bild            |
 
-Beispiel (mit `curl`):
-```bash
-curl -F "image=@pizza.jpg" http://localhost:8080/analyze
-```
-
 ---
 
-## 🧠 Modelltraining (optional)
+
+## Modelltraining (optional)
 
 Du kannst dein eigenes Modell mit der Klasse `Training.java` trainieren:
 
@@ -98,19 +94,17 @@ Du kannst dein eigenes Modell mit der Klasse `Training.java` trainieren:
 mvn exec:java -Dexec.mainClass="ch.zhaw.akguelar.food.Training"
 ```
 
-Dabei wird der Datensatz aus `food-101-tiny/` verwendet (muss vorhanden sein) und ein neues Modell in `models/` gespeichert.
+Dabei wird der Datensatz aus dem Ordner `food-101-tiny/` verwendet.  
+➡️ **Wichtig**: Lade den Datensatz vorher von [dieser Kaggle-Seite](https://www.kaggle.com/datasets/msarmi9/food101tiny?utm_source=chatgpt.com) herunter und speichere ihn im Projektverzeichnis.
 
----
+Nach dem Training wird ein neues Modell im Ordner `models/` gespeichert.
 
-## 📝 Lizenz
-
-Dieses Projekt basiert teilweise auf Code von Amazon/DJL und steht unter der [Apache 2.0 Lizenz](http://www.apache.org/licenses/LICENSE-2.0).
 
 ---
 
 ## 👨‍💻 Autor
 
-Driton Akgül – ZHAW Projekt im Modul *Model Deployment & Maintenance*
+Lara Akgün – ZHAW Projekt im Modul *Model Deployment & Maintenance*
 
 ---
 
