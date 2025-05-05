@@ -38,6 +38,7 @@ Projekt2MDM/
 │   │   ├── Training.java                # Optionales Modelltraining
 │   │   ├── dto/
 │   │   │   ├── LabelInfo.java           # DTO für Labels
+│   │   │   ├── ModelInfo.java           # DTO für Model Infos
 │   │   │   └── ClassificationResult.java # DTO für Ergebnisse
 │   ├── models/                          # Enthält foodclassifier.params + │   │    ├── synset.txt
 │   │    └── foodclassifier-0002.params
@@ -99,6 +100,7 @@ Dabei wird der Datensatz aus dem Ordner `food-101-tiny/` verwendet.
 
 Nach dem Training wird ein neues Modell im Ordner `models/` gespeichert.
 
+**Wichtig:** Zur Erstellung des Modells wurden die Daten von [Food-101](https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/) heruntergeladen. Da die Trainingsdaten jedoch mit über 5 GB zu gross waren, wurde die Anzahl der Klassen von 101 auf 11 reduziert. Die folgenden Klassen sind enthalten: Baklava, Cheesecake, Chocolate Cake, Churros, Donuts, Lasagne, Pancakes, Pizza, Steak, Tiramisu und Waffles.
 
 ---
 
