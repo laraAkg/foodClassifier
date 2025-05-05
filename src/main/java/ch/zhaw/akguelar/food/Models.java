@@ -26,7 +26,7 @@ import java.util.List;
 /** A helper class loads and saves model. */
 public final class Models {
 
-    public static final int NUM_OF_OUTPUT = 10;
+    public static final int NUM_OF_OUTPUT = 11;
 
     // the height and width for pre-processing of the image
     public static final int IMAGE_HEIGHT = 100;

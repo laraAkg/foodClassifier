@@ -15,29 +15,27 @@ document.addEventListener("DOMContentLoaded", () => {
         previewImg.src = URL.createObjectURL(file);
         previewImg.style.display = "block";
     };
-    const showModels = models => {
-        modelsList.innerHTML = models
-            .map(name => `<li class="modelname">${name}</li>`)
-            .join("");
-    };
+
 
     const showResult = entries => {
-        resultText.innerHTML = entries
-            .map(e => `${e.className}: ${(e.probability * 100).toFixed(2)}%`)
-            .join("<br>");
+        resultText.innerHTML = entries.map(entry => `
+            <div class="mb-2">
+                <div class="d-flex justify-content-between">
+                    <strong>${entry.className}</strong>
+                    <span>${(entry.probability * 100).toFixed(2)}%</span>
+                </div>
+                <div class="progress" style="height: 20px;">
+                    <div class="progress-bar bg-success" role="progressbar" 
+                         style="width: ${(entry.probability * 100).toFixed(2)}%;" 
+                         aria-valuenow="${(entry.probability * 100).toFixed(2)}" 
+                         aria-valuemin="0" aria-valuemax="100">
+                    </div>
+                </div>
+            </div>
+        `).join("");
         resultCard.classList.remove("d-none");
     };
 
-    const showLabels = labels => {
-        labelsList.innerHTML = labels
-            .map(({ className, description }) =>
-                `<li>
-             <span class="classname">${className}</span>
-             ${description ? `<span class="description">(${description})</span>` : ""}
-           </li>`
-            )
-            .join("");
-    };
 
     const showError = message => {
         resultText.textContent = message;
@@ -58,19 +56,23 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    // **Neu:** Fetcher für Models
     const fetchModels = async () => {
         try {
             const resp = await fetch("/models");
             if (!resp.ok) throw new Error(`Status ${resp.status}`);
-            const models = await resp.json();
+            const data = await resp.json();
+    
+            const models = Array.isArray(data) ? data : data.models || [];
             showModels(models);
+    
         } catch (err) {
             modelsList.innerHTML =
-                `<li style="color:red">Fehler beim Laden der Modelle: ${err.message}</li>`;
+                `<span class="text-danger">Fehler beim Laden: ${err.message}</span>`;
             console.error(err);
         }
     };
+    
+    
 
     const handleUpload = async e => {
         e.preventDefault();
@@ -101,8 +103,29 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+    const showLabels = labels => {
+        labelsList.innerHTML = labels.map(({ className }) => 
+            `<span class="badge bg-secondary badge-label">${className}</span>`
+        ).join("");
+    };
+    
+    const showModels = models => {
+        modelsList.innerHTML = models.map(model => `
+            <div>
+                <span class="badge bg-info text-dark px-3 py-2">${model.name}</span>
+                <div class="ms-2 mt-1 small text-muted">
+                    Accuracy: ${model.accuracy != null ? (model.accuracy * 100).toFixed(1) + "%" : "–"}<br>
+                    Epochen: ${model.epochs ?? "–"}
+                </div>
+            </div>
+        `).join("");
+    };
+    
+    
+
     // Event-Binding & Initial-Load
     uploadForm.addEventListener("submit", handleUpload);
     fetchLabels();
     fetchModels();
 });
+

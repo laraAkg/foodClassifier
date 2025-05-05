@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import ch.zhaw.akguelar.food.dto.LabelInfo;
+import ch.zhaw.akguelar.food.dto.ModelInfo;
 
 /**
  * REST-Controller für Bildklassifikation:
@@ -49,15 +50,26 @@ public class ClassificationController {
                 "timestamp", Instant.now().toString());
     }
 
+
     /**
-     * Listet alle geladenen Modelle (Dateinamen ohne .params).
+     * Verarbeitet GET-Anfragen an den Endpunkt "/models" und gibt eine Liste der verfügbaren Modelle zurück.
+     * Jedes Modell wird durch ein {@link ModelInfo}-Objekt repräsentiert, das seinen Namen, die Genauigkeit 
+     * und die Version enthält. Die Methode ordnet spezifischen Modellnamen vordefinierte Genauigkeits- und 
+     * Versionswerte zu, während für unbekannte Modelle ein Standard-Fallback bereitgestellt wird.
      *
-     * @return Liste von Modellnamen
+     * @return eine Liste von {@link ModelInfo}-Objekten, die die verfügbaren Modelle repräsentieren.
      */
     @GetMapping("/models")
-    public List<String> listModels() {
-        // z.B. aus deinem Inference-Service: inference.availableModels()
-        return inference.availableModels();
+    public List<ModelInfo> listModels() {
+        return inference.availableModels().stream()
+                .map(name -> {
+                    return switch (name) {
+                        case "foodclassifier-0005" -> new ModelInfo(name, 0.91, 10);
+                        case "foodclassifier-0002" -> new ModelInfo(name, 0.88, 8);
+                        default -> new ModelInfo(name, null, null); // Default-Fallback
+                    };
+                })
+                .collect(Collectors.toList());
     }
 
     /**
