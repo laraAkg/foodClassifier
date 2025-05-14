@@ -64,8 +64,7 @@ public class ClassificationController {
         return inference.availableModels().stream()
                 .map(name -> {
                     return switch (name) {
-                        case "foodclassifier-0005" -> new ModelInfo(name, 0.91, 10);
-                        case "foodclassifier-0002" -> new ModelInfo(name, 0.88, 8);
+                        case "foodclassifier-0010" -> new ModelInfo(name, 0.74, 10);
                         default -> new ModelInfo(name, null, null); // Default-Fallback
                     };
                 })
